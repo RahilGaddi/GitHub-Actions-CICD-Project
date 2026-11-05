@@ -3,11 +3,11 @@ name: Terraform Multi-Job CI/CD Pipeline
 on: 
     workflow_dispatch:    #manual trigger for the workflow
 
-    push:                 #Automatic Trigger
-        branches:
-            - main
-        paths:
-            - 'Roots/**'
+    # push:                 #Automatic Trigger
+    #     branches:
+    #         - main
+    #     paths:
+    #         - 'Roots/**'
 jobs:
     terraform-plan:
         name: Terraform plan
