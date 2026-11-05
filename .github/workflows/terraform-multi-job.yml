@@ -8,6 +8,10 @@ on:
     #         - main
     #     paths:
     #         - 'Roots/**'
+
+defaults:
+        run:
+            working-directory: Roots/environments/dev
 jobs:
     terraform-plan:
         name: Terraform plan
