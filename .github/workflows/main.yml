@@ -1,0 +1,53 @@
+name: Terraform CI/CD Pipeline
+
+on:
+    push:
+        branches:
+            - main
+
+        paths:
+            - 'terraform/**'
+            - '.github/workflows/main.yml'
+        
+    pull_request:
+        branches:
+            - main
+
+        paths:
+            - 'terraform/**'
+            - '.github/workflows/main.yml'
+
+jobs:
+    terraform:
+        name: Terraform CI
+        runs-on: ubuntu-latest
+
+        defaults:
+            run:
+                working-directory: ./terraform
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+             
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+
+            - name: Terraform init
+              run: terraform init
+
+            - name: terraform plan
+              run: terraform plan
+
+            - name: upload plan file
+              uses: actions/upload-artifact@v4
+              with:
+                name: terraform-plan
+                path: terraform/tfplan
+
+            - name: terraform apply    
+              if: github.event_name == 'push'
+              run: terraform apply -auto-approve tfplan
+             
+               
+
