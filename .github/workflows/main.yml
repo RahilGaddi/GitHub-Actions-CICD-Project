@@ -6,7 +6,7 @@ on:
             - main
 
         paths:
-            - 'terraform/**'
+            - 'Roots/**'
             - '.github/workflows/main.yml'
         
     pull_request:
@@ -14,7 +14,7 @@ on:
             - main
 
         paths:
-            - 'terraform/**'
+            - 'Roots/**'
             - '.github/workflows/main.yml'
 
 jobs:
@@ -42,13 +42,14 @@ jobs:
               run: terraform init
 
             - name: terraform plan
-              run: terraform plan
+              run: terraform plan -out=tfplan
 
             - name: upload plan file
               uses: actions/upload-artifact@v4
               with:
                 name: terraform-plan
-                path: terraform/tfplan
+                path: Roots/environments/dev/tfplan
+
 
             - name: terraform apply    
               if: github.event_name == 'push'
