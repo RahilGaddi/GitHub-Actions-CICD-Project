@@ -1,21 +1,22 @@
 name: Terraform Single-Job CI/CD Pipeline
 
 on:
-    push:
-        branches:
-            - main
+    workflow_dispatch:
+    # push:
+    #     branches:
+    #         - main
 
-        paths:
-            - 'Roots/**'
-            - '.github/workflows/terraform-single-job.yml'
+    #     paths:
+    #         - 'Roots/**'
+    #         - '.github/workflows/terraform-single-job.yml'
         
-    pull_request:
-        branches:
-            - main
+    # pull_request:
+    #     branches:
+    #         - main
 
-        paths:
-            - 'Roots/**'
-            - '.github/workflows/terraform-single-job.yml'
+    #     paths:
+    #         - 'Roots/**'
+    #         - '.github/workflows/terraform-single-job.yml'
 
 jobs:
     terraform:
