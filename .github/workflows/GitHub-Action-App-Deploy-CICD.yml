@@ -56,30 +56,30 @@ jobs:
             exit 1
           }
 
-      - name: Verify GitHub Variables
+      - name: Verify GitHub Secrets
         env:
-          BASTION_HOST: ${{ vars.BASTION_HOST }}
-          PRIVATE_EC2_HOST: ${{ vars.PRIVATE_EC2_HOST }}
+          BASTION_HOST: ${{ secrets.BASTION_HOST }}
+          PRIVATE_EC2_HOST: ${{ secrets.PRIVATE_EC2_HOST }}
         run: |
           echo "BASTION_HOST length: ${#BASTION_HOST}"
           echo "PRIVATE_EC2_HOST length: ${#PRIVATE_EC2_HOST}"
 
           if [ -z "$BASTION_HOST" ]; then
-            echo "BASTION_HOST is missing"
+            echo "BASTION_HOST secret is missing"
             exit 1
           fi
 
           if [ -z "$PRIVATE_EC2_HOST" ]; then
-            echo "PRIVATE_EC2_HOST is missing"
+            echo "PRIVATE_EC2_HOST secret is missing"
             exit 1
           fi
 
-          echo "Both EC2 host variables are available."
+          echo "Both EC2 host secrets are available."
 
       - name: Configure SSH
         env:
-          BASTION_HOST: ${{ vars.BASTION_HOST }}
-          PRIVATE_EC2_HOST: ${{ vars.PRIVATE_EC2_HOST }}
+          BASTION_HOST: ${{ secrets.BASTION_HOST }}
+          PRIVATE_EC2_HOST: ${{ secrets.PRIVATE_EC2_HOST }}
         run: |
           cat >> ~/.ssh/config <<EOF
           Host bastion
@@ -101,7 +101,7 @@ jobs:
           chmod 600 ~/.ssh/config
 
       - name: Test Bastion Connection
-        run: ssh bastion "hostname"
+        run: ssh -o ConnectTimeout=15 bastion "hostname"
 
       - name: Test Private EC2 Connection
-        run: ssh private-ec2 "hostname"
+        run: ssh -o ConnectTimeout=15 private-ec2 "hostname"
