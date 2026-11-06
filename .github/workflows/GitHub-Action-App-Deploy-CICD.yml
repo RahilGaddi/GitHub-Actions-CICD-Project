@@ -1,0 +1,38 @@
+name: GitHub Action App Deploy CI/CD
+
+on: 
+    workflow_dispatch:
+
+    push:
+        branches:
+            - main
+        paths:
+            - 'Python-App/**'
+            - '.github/workflows/GitHub-Action-App-Deploy-CICD.yml'
+
+jobs:
+    build:
+        name: Build Python Application
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: '3.11'
+            
+            - name: Install dependencies
+              working-directory: Python-App
+              run: |
+                    python -m pip install --upgrade pip
+                    pip install -r Python-App/requirements.txt  
+
+
+            - name: validate code
+              working-directory: Python-App
+              run: |
+                    python -m py_compile app.py
+                    echo "Code validation successful!"
