@@ -43,6 +43,9 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Setup SSH Key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -61,9 +64,6 @@ jobs:
           BASTION_HOST: ${{ secrets.BASTION_HOST }}
           PRIVATE_EC2_HOST: ${{ secrets.PRIVATE_EC2_HOST }}
         run: |
-          echo "BASTION_HOST length: ${#BASTION_HOST}"
-          echo "PRIVATE_EC2_HOST length: ${#PRIVATE_EC2_HOST}"
-
           if [ -z "$BASTION_HOST" ]; then
             echo "BASTION_HOST secret is missing"
             exit 1
@@ -105,3 +105,11 @@ jobs:
 
       - name: Test Private EC2 Connection
         run: ssh -o ConnectTimeout=15 private-ec2 "hostname"
+
+      - name: Install Python on Private EC2
+        run: |
+          ssh private-ec2 '
+            sudo dnf install python3 python3-pip -y
+            python3 --version
+            pip3 --version
+          '
