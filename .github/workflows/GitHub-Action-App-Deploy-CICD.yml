@@ -49,6 +49,21 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
+
+      - name: Verify GitHub Variables
+        run: |
+          if [ -z "${{ vars.BASTION_HOST }}" ]; then
+            echo "BASTION_HOST is missing"
+            exit 1
+          fi
+
+          if [ -z "${{ vars.PRIVATE_EC2_HOST }}" ]; then
+            echo "PRIVATE_EC2_HOST is missing"
+            exit 1
+          fi
+
+          echo "Both EC2 host variables are available."
+
       - name: Configure SSH
         run: |
           cat >> ~/.ssh/config <<EOF
